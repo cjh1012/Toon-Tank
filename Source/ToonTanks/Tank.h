@@ -34,10 +34,10 @@ private:
 	class UCameraComponent* Camera;
 
 	UPROPERTY(EditAnywhere, Category = "Movement")
-	float Speed= 1;
+	float Speed= 20;
 
 	UPROPERTY(EditAnywhere, Category = "RotationRate")
-	float TurnRate = 1;
+	float TurnRate = 30;
 
 	void Move(float Value);
 	void Turn(float Value);

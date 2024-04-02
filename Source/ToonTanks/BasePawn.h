@@ -15,9 +15,11 @@ public:
 	// Sets default values for this pawn's properties
 	ABasePawn();
 
-protected:
+protected:													//하위 클래스에서만 접근 가능
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
+
+	void RotateTurret(FVector LookAtTarget);				//포탑 방향 조절
 
 private:
 

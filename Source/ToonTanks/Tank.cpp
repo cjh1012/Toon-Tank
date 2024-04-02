@@ -47,7 +47,7 @@ void ATank::Tick(float DeltaTime)
 {
     Super::Tick(DeltaTime);
 
-    if(PlayerControllerRef)
+    if(PlayerControllerRef) 
     {
         FHitResult HitResult;
         PlayerControllerRef->GetHitResultUnderCursor(                   //(트레이스채널, bTraceComplex, HitResult(결과를 저장할 hitresult 인스턴스))
@@ -57,12 +57,14 @@ void ATank::Tick(float DeltaTime)
         
         DrawDebugSphere(
             GetWorld(),                                             //현재 월드 호출
-            HitResult.ImpactPoint,          //구체의 중심       getactorlocation은 탱크폰의 위치 반환
+            HitResult.ImpactPoint,                                  //구체의 중심이 되는 위치       getactorlocation은 탱크폰의 위치 반환
             10.f,                                                   //구체 반경
             12,                                                     //세그먼트 개수    
             FColor::Red,
-            false,                                                   //bPersistentLines
+            false,                                                   //bPersistentLines - 마우스 커서의 이동경로가 남음 == 생성된 구체가 유지되는 옵션인듯?
             -1.f);  
+    
+        RotateTurret(HitResult.ImpactPoint);
     }
 }
 
