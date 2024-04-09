@@ -5,6 +5,8 @@
 #include "Components/CapsuleComponent.h"
 #include "Components/StaticMeshComponent.h"
 #include "Kismet/GameplayStatics.h"
+#include "Projectile.h"
+
 // Sets default values
 ABasePawn::ABasePawn()
 {
@@ -55,4 +57,17 @@ void ABasePawn::Tick(float DeltaTime)
 
 }
 
+void ABasePawn::Fire()			
+{
+	//DrawDebugSphere(GetWorld(), ProjectileSpawnPoint->GetComponentLocation(), 10.f, 12, FColor::Red, false, 3.f);
+	
+	auto Projectile = GetWorld()->SpawnActor<AProjectile>	(
+		ProjectileClass, 
+		ProjectileSpawnPoint->GetComponentLocation(), 
+		ProjectileSpawnPoint->GetComponentRotation()
+	);
+
+	//발사체를 생성한 폰을 소유자로 지정함
+	Projectile->SetOwner(this);
+}
 

@@ -4,6 +4,7 @@
 #include "Tower.h"
 #include "Tank.h"
 #include "Kismet/GameplayStatics.h"
+#include "TimerManager.h"
 
 
 void ATower::BeginPlay()
@@ -12,18 +13,30 @@ void ATower::BeginPlay()
 
     Tank = Cast<ATank>(UGameplayStatics::GetPlayerPawn(this, 0));       //탱크의 위치를 찾기 위해 탱크 컴포넌트 변수 선언 후 할당
 
-
+    GetWorldTimerManager().SetTimer(FireRateTimerHandle, this, &ATower::CheckFireCondition, FireRate, true);  //(타이머핸들, userclass, 콜백함수의 주소, 속도(주기), 반복여부(false 시 1회만 반복되고 종료))
 }
 
 void ATower::Tick(float DeltaTime) 
 {
     Super::Tick(DeltaTime);
+    if(InFireRange()) {
+        RotateTurret(Tank->GetActorLocation());
+    }
+}
+
+void ATower::CheckFireCondition()
+{
+    if(InFireRange()) Fire();
+}
+
+bool ATower::InFireRange()
+{
     if(Tank){
         float Distance = FVector::Dist(GetActorLocation(), Tank->GetActorLocation());       //탱크와 타워 사이 거리
         if(Distance <= FireRange)
         {
-            RotateTurret(Tank->GetActorLocation());
+            return true;
         }
     }
+    return false;
 }
-   

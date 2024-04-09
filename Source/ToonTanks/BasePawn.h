@@ -21,6 +21,8 @@ protected:													//하위 클래스에서만 접근 가능
 
 	void RotateTurret(FVector LookAtTarget);				//포탑 방향 조절
 
+	void Fire();
+
 private:
 
 	UPROPERTY(VisibleAnywhere,BlueprintReadOnly,Category="Component", meta = (AllowPrivateAccess = "true"))
@@ -32,6 +34,9 @@ private:
 	UStaticMeshComponent* TurretMesh;
 	UPROPERTY(VisibleAnywhere)
 	USceneComponent* ProjectileSpawnPoint;
+
+	UPROPERTY(EditDefaultsOnly, Category = "Combat")
+	TSubclassOf<class AProjectile> ProjectileClass;
 
 public:	
 	// Called every frame

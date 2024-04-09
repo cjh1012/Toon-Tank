@@ -21,8 +21,10 @@ void ATank::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
 {
     Super::SetupPlayerInputComponent(PlayerInputComponent);
     
-    PlayerInputComponent->BindAxis(TEXT("MoveForward"), this, &ATank::Move);
+    PlayerInputComponent->BindAxis(TEXT("MoveForward"), this, &ATank::Move);                //TEXT 매크로 값은 프로젝트 세팅-입력에서 설정된 값과 동일해야 함
     PlayerInputComponent->BindAxis(TEXT("Turn"), this, &ATank::Turn);
+
+    PlayerInputComponent->BindAction(TEXT("Fire"), IE_Pressed, this, &ATank::Fire);
 }
 
 void ATank::BeginPlay()
@@ -59,9 +61,9 @@ void ATank::Tick(float DeltaTime)
             GetWorld(),                                             //현재 월드 호출
             HitResult.ImpactPoint,                                  //구체의 중심이 되는 위치       getactorlocation은 탱크폰의 위치 반환
             10.f,                                                   //구체 반경
-            12,                                                     //세그먼트 개수    
+            12,                                                     //세그먼트 개수 - 구체의 표면을 근사화하는데 사용되는 세그먼트의 수
             FColor::Red,
-            false,                                                   //bPersistentLines - 마우스 커서의 이동경로가 남음 == 생성된 구체가 유지되는 옵션인듯?
+            false,                                                   //bPersistentLines - 영구적으로 구체가 생성됨
             -1.f);  
     
         RotateTurret(HitResult.ImpactPoint);
