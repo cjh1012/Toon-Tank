@@ -31,7 +31,7 @@ void ATank::BeginPlay()
 {
     Super::BeginPlay();
 
-    PlayerControllerRef = Cast<APlayerController>(GetController());      //APlayerController 클래스는 AController 클래스의 하위 클래스임 => cast 형변환을 통해 포인터 타입을 변경 cast<바꾸고 싶은 타입> (바꾸려는 인스턴스)
+    TankPlayerController = Cast<APlayerController>(GetController());      //APlayerController 클래스는 AController 클래스의 하위 클래스임 => cast 형변환을 통해 포인터 타입을 변경 cast<바꾸고 싶은 타입> (바꾸려는 인스턴스)
 /*
     DrawDebugSphere(
         GetWorld(),                                             //현재 월드 호출
@@ -49,10 +49,10 @@ void ATank::Tick(float DeltaTime)
 {
     Super::Tick(DeltaTime);
 
-    if(PlayerControllerRef) 
+    if(TankPlayerController) 
     {
         FHitResult HitResult;
-        PlayerControllerRef->GetHitResultUnderCursor(                   //(트레이스채널, bTraceComplex, HitResult(결과를 저장할 hitresult 인스턴스))
+        TankPlayerController->GetHitResultUnderCursor(                   //(트레이스채널, bTraceComplex, HitResult(결과를 저장할 hitresult 인스턴스))
             ECollisionChannel::ECC_Visibility,                          //ECC = E Collision Channel
             false, 
             HitResult);
@@ -68,6 +68,14 @@ void ATank::Tick(float DeltaTime)
     
         RotateTurret(HitResult.ImpactPoint);
     }
+}
+
+void ATank::HandleDestruction()
+{
+    Super::HandleDestruction();
+    //탱크는 파괴하지 않고 숨김 => 틱을 비활성화하여 월드에 존재하고 우리가 소유할 수 있도록 함. 카메라를 통한 뷰를 볼 수는 있지만 탱크를 보거나 움직일 수는 없음
+    SetActorHiddenInGame(true);
+    SetActorTickEnabled(false);
 }
 
 void ATank::Move(float Value)

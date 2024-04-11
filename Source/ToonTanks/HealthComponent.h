@@ -36,4 +36,5 @@ private:
 	//instigator => 데미지를 관리하는 컨트롤러, 폰을 조종하는 플레이어 때문에 데미지가 발생했다면 Instigator는 폰을 조종하는 컨트롤러가 됨, 없을땐 null e.g. 총을 쏜 컨트롤러가 instigator가 됨
 	//DamageCauser => 데미지를 발생시킨 액터, 총, 수류탄 등등
 
+	class AToonTanksGameMode* ToonTanksGameMode;
 };

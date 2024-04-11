@@ -43,6 +43,11 @@ void ABasePawn::RotateTurret(FVector LookAtTarget)				//포탑부분을 회전�
 	
 }
 
+void ABasePawn::HandleDestruction()
+{
+	// ToDo: Visual/sound effects
+}
+
 // Called when the game starts or when spawned
 void ABasePawn::BeginPlay()
 {

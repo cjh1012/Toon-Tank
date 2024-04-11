@@ -22,6 +22,11 @@ public:
 
 	virtual void Tick(float DeltaTime) override;
 
+	void HandleDestruction();
+
+	//public Getter => 일반적으로 변수 앞에 이름에는 get을 붙이며 const도 사용함, 아무것도 바뀌게 하지 않고 반환만 하기 때문
+	APlayerController* GetTankPlayerController() const { return TankPlayerController; }
+
 protected:
 	//Called when the game starts or when spawned
 	virtual void BeginPlay() override;
@@ -42,5 +47,5 @@ private:
 	void Move(float Value);
 	void Turn(float Value);
 
-	APlayerController* PlayerControllerRef;
+	APlayerController* TankPlayerController;			//변수 이름을 잘못 지었을 때는 해당 변수 드래그해서 선택 후 F2를 눌러 변경
 };
