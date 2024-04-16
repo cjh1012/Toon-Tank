@@ -4,6 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "GameFramework/Actor.h"
+#include "Particles/ParticleSystemComponent.h"
 #include "Projectile.generated.h"
 
 UCLASS()
@@ -40,4 +41,10 @@ private:
 
 	UPROPERTY(EditAnywhere)
 	float Damage = 50.f;
+
+	UPROPERTY(EditAnywhere, Category = "Combat")		//피격 이펙트
+	class UParticleSystem* HitParticles;
+
+	UPROPERTY(VisibleAnywhere, Category = "Combat")		//발사체 연기
+	UParticleSystemComponent* SmokeTrailParticle;	
 };

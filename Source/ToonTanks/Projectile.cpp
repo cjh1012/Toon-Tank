@@ -19,6 +19,9 @@ AProjectile::AProjectile()
 	ProjectileMovementComponent = CreateDefaultSubobject<UProjectileMovementComponent>(TEXT("Projectile Movement Component"));
 	ProjectileMovementComponent->MaxSpeed = 1300.f;
 	ProjectileMovementComponent->InitialSpeed = 1300.f;
+
+	SmokeTrailParticle = CreateDefaultSubobject<UParticleSystemComponent>(TEXT("Smoke Trail"));
+	SmokeTrailParticle->SetupAttachment(RootComponent);
 }
 
 // Called when the game starts or when spawned
@@ -42,16 +45,21 @@ void AProjectile::OnHit(UPrimitiveComponent *HitComp, AActor *OtherActor, UPrimi
 	//Instigator의 컨트롤러에 접근
 	auto MyOwner = GetOwner();
 
-	if(MyOwner == nullptr) return;
-
+	if(MyOwner == nullptr) 
+	{
+		Destroy();
+		return;
+	}
 	auto MyOwnerInstigator = MyOwner->GetInstigatorController();
 	//UDamageType 클래스를 나타내는 UClass값이 필요할때 StaticClass 함수를 사용. StaticClass는 UClass 타입을 반환
 	auto DamageTypeClass = UDamageType::StaticClass();
 
 	if(OtherActor && OtherActor != this && OtherActor != MyOwner) 	//OtherActor가 Null이 아닌지, 자신이 아닌지, 소유자가 아닌지 확인
 	{
-		UGameplayStatics::ApplyDamage(OtherActor, Damage, MyOwnerInstigator, this, DamageTypeClass);
-		Destroy();
+		UGameplayStatics::ApplyDamage(OtherActor, Damage, MyOwnerInstigator, this, DamageTypeClass);				//데미지 적용
+		if (HitParticles)
+			UGameplayStatics::SpawnEmitterAtLocation(this, HitParticles, GetActorLocation(), GetActorRotation());		//파티클(피격 시 효과) 호출
 	}
+	Destroy();
 }
 
