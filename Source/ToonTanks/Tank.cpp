@@ -57,7 +57,7 @@ void ATank::Tick(float DeltaTime)
             false, 
             HitResult);
         
-        DrawDebugSphere(
+        /*DrawDebugSphere(
             GetWorld(),                                             //현재 월드 호출
             HitResult.ImpactPoint,                                  //구체의 중심이 되는 위치       getactorlocation은 탱크폰의 위치 반환
             10.f,                                                   //구체 반경
@@ -65,7 +65,7 @@ void ATank::Tick(float DeltaTime)
             FColor::Red,
             false,                                                   //bPersistentLines - 영구적으로 구체가 생성됨
             -1.f);  
-    
+        */
         RotateTurret(HitResult.ImpactPoint);
     }
 }
