@@ -5,6 +5,7 @@
 #include "Components/CapsuleComponent.h"
 #include "Components/StaticMeshComponent.h"
 #include "Kismet/GameplayStatics.h"
+#include "Particles/ParticleSystem.h"
 #include "Projectile.h"
 
 // Sets default values
@@ -46,6 +47,20 @@ void ABasePawn::RotateTurret(FVector LookAtTarget)				//포탑부분을 회전�
 void ABasePawn::HandleDestruction()
 {
 	// ToDo: Visual/sound effects
+	if (DeathParticle)
+	{
+		UGameplayStatics::SpawnEmitterAtLocation(this, DeathParticle, GetActorLocation(), GetActorRotation());	//파괴 이펙트 파티클 호출
+	}
+	if (DeathSound) 
+	{
+		UGameplayStatics::PlaySoundAtLocation(this, DeathSound, GetActorLocation(), GetActorRotation());		//파괴 시 소리 호출
+	}
+	
+	if(DeathCameraShakeClass)
+	{																											//카메라 흔들림 효과
+		GetWorld()->GetFirstPlayerController()->ClientStartCameraShake(DeathCameraShakeClass);
+	}																						
+
 }
 
 // Called when the game starts or when spawned
@@ -66,7 +81,7 @@ void ABasePawn::Fire()
 {
 	//DrawDebugSphere(GetWorld(), ProjectileSpawnPoint->GetComponentLocation(), 10.f, 12, FColor::Red, false, 3.f);
 	
-	auto Projectile = GetWorld()->SpawnActor<AProjectile>	(
+	AProjectile* Projectile = GetWorld()->SpawnActor<AProjectile>	(
 		ProjectileClass, 
 		ProjectileSpawnPoint->GetComponentLocation(), 
 		ProjectileSpawnPoint->GetComponentRotation()

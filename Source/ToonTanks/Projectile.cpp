@@ -31,6 +31,7 @@ void AProjectile::BeginPlay()
 	
 	//OnHit 함수를 delegate에 바인딩. OnComponentHit.AddDynamic(사용자객체, 콜백함수)
 	ProjectileMesh -> OnComponentHit.AddDynamic(this, &AProjectile::OnHit); 						//생성자에서 콜백함수를 delegate에 바인딩하게 되면 시기가 너무 이르기에 바인딩 되지 않는 문제가 발생할 수 있음. =>BeginPlay함수에서 실행
+	if(LaunchSound) UGameplayStatics::PlaySoundAtLocation(this, LaunchSound, GetActorLocation(), GetActorRotation());		//발사 소리 = 생성될 때 소리 재생 
 }
 
 // Called every frame
@@ -43,22 +44,28 @@ void AProjectile::Tick(float DeltaTime)
 void AProjectile::OnHit(UPrimitiveComponent *HitComp, AActor *OtherActor, UPrimitiveComponent *OtherComp, FVector NormalImpulse, const FHitResult &Hit)
 {
 	//Instigator의 컨트롤러에 접근
-	auto MyOwner = GetOwner();
+	AActor* MyOwner = GetOwner();
 
 	if(MyOwner == nullptr) 
 	{
 		Destroy();
 		return;
 	}
-	auto MyOwnerInstigator = MyOwner->GetInstigatorController();
+	AController* MyOwnerInstigator = MyOwner->GetInstigatorController();
 	//UDamageType 클래스를 나타내는 UClass값이 필요할때 StaticClass 함수를 사용. StaticClass는 UClass 타입을 반환
-	auto DamageTypeClass = UDamageType::StaticClass();
+	UClass* DamageTypeClass = UDamageType::StaticClass();
 
 	if(OtherActor && OtherActor != this && OtherActor != MyOwner) 	//OtherActor가 Null이 아닌지, 자신이 아닌지, 소유자가 아닌지 확인
 	{
 		UGameplayStatics::ApplyDamage(OtherActor, Damage, MyOwnerInstigator, this, DamageTypeClass);				//데미지 적용
 		if (HitParticles)
-			UGameplayStatics::SpawnEmitterAtLocation(this, HitParticles, GetActorLocation(), GetActorRotation());		//파티클(피격 시 효과) 호출
+			UGameplayStatics::SpawnEmitterAtLocation(this, HitParticles, GetActorLocation(), GetActorRotation());	//파티클(피격 시 효과) 호출
+		
+		if(HitCameraShakeClass)																						//카메라 흔들림 효과
+			GetWorld()->GetFirstPlayerController()->ClientStartCameraShake(HitCameraShakeClass);
+
+		if (HitSound)
+			UGameplayStatics::PlaySoundAtLocation(this, HitSound, GetActorLocation(), GetActorRotation());			//피격 시 음성효과 호출
 	}
 	Destroy();
 }

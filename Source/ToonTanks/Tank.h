@@ -27,6 +27,8 @@ public:
 	//public Getter => 일반적으로 변수 앞에 이름에는 get을 붙이며 const도 사용함, 아무것도 바뀌게 하지 않고 반환만 하기 때문
 	APlayerController* GetTankPlayerController() const { return TankPlayerController; }
 
+	bool bAlive = true;
+
 protected:
 	//Called when the game starts or when spawned
 	virtual void BeginPlay() override;

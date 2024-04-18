@@ -76,6 +76,7 @@ void ATank::HandleDestruction()
     //탱크는 파괴하지 않고 숨김 => 틱을 비활성화하여 월드에 존재하고 우리가 소유할 수 있도록 함. 카메라를 통한 뷰를 볼 수는 있지만 탱크를 보거나 움직일 수는 없음
     SetActorHiddenInGame(true);
     SetActorTickEnabled(false);
+    bAlive = false;
 }
 
 void ATank::Move(float Value)

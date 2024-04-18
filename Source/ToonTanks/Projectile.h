@@ -47,4 +47,13 @@ private:
 
 	UPROPERTY(VisibleAnywhere, Category = "Combat")		//발사체 연기
 	UParticleSystemComponent* SmokeTrailParticle;	
+
+	UPROPERTY(EditAnywhere, Category = "Combat")
+	class USoundBase* LaunchSound;
+
+	UPROPERTY(EditAnywhere, Category = "Combat")
+	USoundBase* HitSound;
+
+	UPROPERTY(EditAnywhere, Category = "Combat")
+	TSubclassOf<class UCameraShakeBase> HitCameraShakeClass;
 };
